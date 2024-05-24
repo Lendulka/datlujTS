@@ -1,0 +1,20 @@
+.control {
+    display: flex;
+    flex-direction: column;
+
+
+}
+
+nav a {
+    border-bottom: 1px solid #8fb935;
+    display: inline-block;
+    width: 10rem;
+}
+
+@media (min-width: 760px) {
+
+    nav a {
+        width: 7rem;
+    }
+
+}

@@ -22,13 +22,13 @@ const generateWord = (size: number) => {
 }
 
 const Stage: React.FC = () => {
-  const [words, setWords] = useState<string[]>(["jahoda", "malina", "banán"]);
+  const [words, setWords] = useState<string[]>(["jahoda", "malina", "jablko", "ananas"]);
   const [mistakes, setMistakes] = useState<number>(0)
 
   console.log(words)
 
   const handleFinish = (): void => {
-    const newWord = generateWord(6)
+    const newWord = generateWord(4)
     if (newWord !== null) {
       const copyArray = [...words]
       const result = copyArray.slice(1, 3)
