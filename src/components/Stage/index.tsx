@@ -1,10 +1,14 @@
 import { useState } from 'react';
-import Wordbox from '../Wordbox';
+import { FormDataStructure } from '../Select/Select';
 import wordList from '../../word-list';
+import Wordbox from '../Wordbox';
+import Select from '../Select/Select';
 import './style.css';
 
 // TODO: temporary disable function - remove next line when you start using it
 /* eslint-disable-next-line @typescript-eslint/no-unused-vars */
+
+console.log(wordList.length)
 
 const generateWord = (size: number) => {
 
@@ -21,28 +25,35 @@ const generateWord = (size: number) => {
   return words[wordIndex];
 }
 
-const Stage: React.FC = () => {
+export const Stage: React.FC = () => {
   const [words, setWords] = useState<string[]>(["jahoda", "malina", "jablko", "ananas"]);
   const [mistakes, setMistakes] = useState<number>(0)
+  const [selectCount, setSelectCount] = useState<number>(0)
 
-  console.log(words)
+  console.log(selectCount)
 
-  const handleFinish = (): void => {
-    const newWord = generateWord(4)
+  const handleSubmitData = (data: FormDataStructure) => {
+    setSelectCount(data.count)
+  }
+
+  const handleFinish = () => {
+    let selectNumber = Number(selectCount)
+    const newWord = generateWord(selectNumber)
     if (newWord !== null) {
       const copyArray = [...words]
-      const result = copyArray.slice(1, 3)
+      const result = copyArray.slice(1)
       result.push(newWord)
       setWords(result)
     }
   }
 
-  const handleMistake = (): void => {
+  const handleMistake = () => {
     setMistakes(mistakes + 1)
   }
 
   return (
     <div className="stage">
+      <Select count={selectCount} onSubmitData={handleSubmitData} />
       <div className="stage__mistakes">Chyb: {mistakes}</div>
       <div className="stage__words">
         {words.map((word, index) =>

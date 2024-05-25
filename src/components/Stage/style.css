@@ -4,7 +4,7 @@
   margin: 32px 10px;
   background-color: #efefef;
   border-radius: 8px;
-  z-index: -1;
+  /*z-index: -1;*/
 }
 
 .stage__mistakes {

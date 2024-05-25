@@ -8,7 +8,7 @@ interface IWordboxProp {
   onMistake: () => void;
 }
 
-const Wordbox: React.FC<IWordboxProp> = ({ word, onFinish, active, onMistake }) => {
+export const Wordbox: React.FC<IWordboxProp> = ({ word, onFinish, active, onMistake }) => {
   const [lettersLeft, setLettersLeft] = useState<string>(word);
   const [mistake, setMistake] = useState<boolean>(false)
 
