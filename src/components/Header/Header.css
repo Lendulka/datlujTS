@@ -17,12 +17,24 @@ header {
 }
 
 .logo {
-    width: 180px;
-    height: 50px;
+    width: 60px;
+    height: 60px;
     display: flex;
     align-items: center;
-    /*background-image: url("./img/site-logo.png");*/
+    background-image: url("/icons8-woody-woodpecker-96.svg");
     background-size: contain;
+}
+
+.logo__heading {
+    color: black;
+    font-size: 1.5rem;
+    font-weight: bold;
+}
+
+.logo__control {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
 }
 
 .navigation {
@@ -96,11 +108,17 @@ nav a {
         background-color: #d5ff79;
     }
 
+    .logo__heading {
+        margin-left: 0.8rem;
+    }
+
+
     .navigation {
         display: flex;
         flex-direction: row;
-        justify-content: end;
-        flex: 1;
+        justify-content: center;
+
+        /*flex: 1;*/
         height: 100%;
         align-items: flex-end;
     }
@@ -109,8 +127,8 @@ nav a {
         display: flex;
         flex-direction: row;
         justify-content: end;
-
-        text-align: end;
+        align-items: center;
+        text-align: center;
         width: 100%;
         margin-top: 0;
         height: 100%;
@@ -119,7 +137,7 @@ nav a {
 
     .nav-links a {
         display: inline-block;
-
+        text-align: center;
 
         margin-top: 0rem;
         margin-bottom: 0rem;

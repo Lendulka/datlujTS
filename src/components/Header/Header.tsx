@@ -39,7 +39,10 @@ const Header: React.FC = () => {
 
     return (
         <div className="header__content container">
-            <div className="logo"></div>
+            <div className="logo__control">
+                <div className="logo"></div>
+                <div className="logo__heading">Datluj.cz</div>
+            </div>
 
             <div className="navigation">
 
