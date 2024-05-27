@@ -6,11 +6,13 @@ interface IWordboxProp {
   onFinish: () => void;
   active: boolean;
   onMistake: () => void;
+  onKeyDown: () => void;
 }
 
-export const Wordbox: React.FC<IWordboxProp> = ({ word, onFinish, active, onMistake }) => {
+export const Wordbox: React.FC<IWordboxProp> = ({ word, onFinish, active, onMistake, onKeyDown }) => {
   const [lettersLeft, setLettersLeft] = useState<string>(word);
   const [mistake, setMistake] = useState<boolean>(false)
+  const [keyDown, setKeyDown] = useState<boolean>(false)
 
   console.log(lettersLeft)
 
@@ -30,6 +32,13 @@ export const Wordbox: React.FC<IWordboxProp> = ({ word, onFinish, active, onMist
     }
   }
 
+  const handleTimer = (e: KeyboardEvent) => {
+    if (e.key) {
+      setKeyDown(true)
+      onKeyDown()
+    }
+  }
+
   useEffect(() => {
     if (active) {
       console.log("spuštění efektu")
@@ -42,6 +51,16 @@ export const Wordbox: React.FC<IWordboxProp> = ({ word, onFinish, active, onMist
       }
     }
   }, [lettersLeft, mistake, active, onMistake])
+
+
+  useEffect(() => {
+    document.addEventListener("keydown", handleTimer)
+    return () => {
+      document.removeEventListener("keydown", handleTimer)
+    }
+  }, [])
+
+
 
   return (
     <div className={`wordbox ${mistake && "wordbox--mistake"}`}>{lettersLeft}</div>

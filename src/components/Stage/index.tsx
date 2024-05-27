@@ -1,8 +1,8 @@
-import { useState } from 'react';
-import { FormDataStructure } from '../Select/Select';
+import { useState, useEffect } from 'react';
+import { FormDataStructure } from '../Form/Form';
 import wordList from '../../word-list';
 import Wordbox from '../Wordbox';
-import Select from '../Select/Select';
+import Form from '../Form/Form';
 import './style.css';
 
 // TODO: temporary disable function - remove next line when you start using it
@@ -25,19 +25,41 @@ const generateWord = (size: number) => {
   return words[wordIndex];
 }
 
+export interface StageProps {
+  count: number;
+  minutes: number;
+}
+
 export const Stage: React.FC = () => {
   const [words, setWords] = useState<string[]>(["jahoda", "malina", "jablko", "ananas"]);
   const [mistakes, setMistakes] = useState<number>(0)
-  const [selectCount, setSelectCount] = useState<number>(0)
+  const [selectCount, setSelectCount] = useState<StageProps>({
+    count: 0,
+    minutes: 0,
+  })
+  const [timer, setTimer] = useState<boolean>(false)
 
-  console.log(selectCount)
+  console.log(selectCount.count, selectCount.minutes)
+
+  const stopGame = () => {
+    console.log("STOP")
+  }
+
+  useEffect(() => {
+    if (selectCount.minutes > 0 && timer) {
+      let milSec = Number(selectCount.minutes) * 60 * 1000
+      const timeOut = setTimeout(stopGame, milSec);
+      return () => { clearTimeout(timeOut) }
+    }
+  }, [selectCount.minutes, timer])
+
 
   const handleSubmitData = (data: FormDataStructure) => {
-    setSelectCount(data.count)
+    setSelectCount({ ...selectCount, count: data.count, minutes: data.minutes })
   }
 
   const handleFinish = () => {
-    let selectNumber = Number(selectCount)
+    let selectNumber = Number(selectCount.count)
     const newWord = generateWord(selectNumber)
     if (newWord !== null) {
       const copyArray = [...words]
@@ -51,9 +73,13 @@ export const Stage: React.FC = () => {
     setMistakes(mistakes + 1)
   }
 
+  const handleKeyDown = () => {
+    setTimer(true)
+  }
+
   return (
     <div className="stage">
-      <Select count={selectCount} onSubmitData={handleSubmitData} />
+      <Form count={selectCount.count} minutes={selectCount.minutes} onSubmitData={handleSubmitData} />
       <div className="stage__mistakes">Chyb: {mistakes}</div>
       <div className="stage__words">
         {words.map((word, index) =>
@@ -63,6 +89,7 @@ export const Stage: React.FC = () => {
             onFinish={handleFinish}
             active={index === 0 ? true : false}
             onMistake={handleMistake}
+            onKeyDown={handleKeyDown}
           />
         )}
       </div>

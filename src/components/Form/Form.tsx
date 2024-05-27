@@ -1,17 +1,19 @@
 import { useState } from 'react';
-import './Select.css'
+import './Form.css'
 
 export interface FormDataStructure {
     count: number;
+    minutes: number;
 }
 
 export interface FormProps extends FormDataStructure {
     onSubmitData: (data: FormDataStructure) => void
 }
 
-export const Select: React.FC<FormProps> = ({ count, onSubmitData }) => {
+export const Form: React.FC<FormProps> = ({ count, minutes, onSubmitData }) => {
     const [selectData, setSelectData] = useState<FormDataStructure>({
         count: count,
+        minutes: minutes,
     })
 
     console.log(count)
@@ -23,7 +25,7 @@ export const Select: React.FC<FormProps> = ({ count, onSubmitData }) => {
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
         let targetValue = Number(e.target.value)
-        setSelectData({ ...selectData, count: targetValue })
+        setSelectData({ ...selectData, [e.target.name]: targetValue })
     }
 
     const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
@@ -34,7 +36,7 @@ export const Select: React.FC<FormProps> = ({ count, onSubmitData }) => {
     return (
         <form className="form" onSubmit={handleSubmit}>
             <label className="form__label">
-                Vyber délku slov
+                Délka slov
                 <select
                     className="form__input"
                     name="count"
@@ -46,11 +48,28 @@ export const Select: React.FC<FormProps> = ({ count, onSubmitData }) => {
                     {options.map((oneOption) => <option key={oneOption} value={oneOption}>{oneOption}</option>)}
                 </select>
             </label>
-            <button className="form__button" type="submit">Potvrdit</button>
+            <label className="form__label">
+                Počet minut
+                <select
+                    className="form__input"
+                    name="minutes"
+                    value={selectData.minutes}
+                    onChange={handleChange}
+                    required
+                >
+                    <option value="">Select one</option>
+                    <option value="2">1</option>
+                    <option value="4">4</option>
+                    <option value="6">6</option>
+                    <option value="8">8</option>
+                    <option value="10">10</option>
+                </select>
+            </label>
+            <button className="form__button" type="submit">Nastavit</button>
         </form>
     )
 }
 
-export default Select;
+export default Form;
 
 
