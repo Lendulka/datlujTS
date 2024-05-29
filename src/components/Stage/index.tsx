@@ -33,26 +33,44 @@ export interface StageProps {
 export const Stage: React.FC = () => {
   const [words, setWords] = useState<string[]>(["jahoda", "malina", "jablko", "ananas"]);
   const [mistakes, setMistakes] = useState<number>(0)
+  const [timer, setTimer] = useState<boolean>(false)
+  const [_, setStartGame] = useState<boolean>(false)
+  const [finish, setFinish] = useState<boolean>(false)
+  const [totalKeyStroke, setTotalKeyStroke] = useState<number>(0)
+  const [nettoKeyStroke, setnettoKeyStroke] = useState<number>(0)
+  const [mistakesPercentage, setMistakesPercentage] = useState<number>(0)
   const [selectCount, setSelectCount] = useState<StageProps>({
     count: 0,
     minutes: 0,
   })
-  const [timer, setTimer] = useState<boolean>(false)
 
   console.log(selectCount.count, selectCount.minutes)
+  console.log(totalKeyStroke)
+
+  useEffect(() => {
+    if (finish) {
+      let nettoStroke = Math.round((totalKeyStroke - (mistakes * 50)) / selectCount.minutes)
+      console.log(totalKeyStroke, mistakes, selectCount.minutes)
+      let percentage = ((mistakes * 100) / totalKeyStroke)
+      let percentageRounded = Math.round(percentage * 100) / 100
+      setnettoKeyStroke(nettoStroke)
+      setMistakesPercentage(percentageRounded)
+    }
+  }, [finish])
+
 
   const stopGame = () => {
     console.log("STOP")
+    setFinish(true)
   }
 
   useEffect(() => {
-    if (selectCount.minutes > 0 && timer) {
-      let milSec = Number(selectCount.minutes) * 60 * 1000
-      const timeOut = setTimeout(stopGame, milSec);
-      return () => { clearTimeout(timeOut) }
+    if (timer) {
+      let milSec = (Number(selectCount.minutes) * 60 * 1000)
+      const timerId = setTimeout(stopGame, milSec)
+      return () => { clearTimeout(timerId) }
     }
-  }, [selectCount.minutes, timer])
-
+  }, [timer])
 
   const handleSubmitData = (data: FormDataStructure) => {
     setSelectCount({ ...selectCount, count: data.count, minutes: data.minutes })
@@ -73,26 +91,49 @@ export const Stage: React.FC = () => {
     setMistakes(mistakes + 1)
   }
 
-  const handleKeyDown = () => {
-    setTimer(true)
+  const handleKeyStroke = () => {
+    setTotalKeyStroke(prev => prev + 1)
+  }
+
+  const handleStartGame = () => {
+    setStartGame(true)
+    setFinish(false)
+    setSelectCount({ ...selectCount, count: 0, minutes: 0 })
   }
 
   return (
-    <div className="stage">
-      <Form count={selectCount.count} minutes={selectCount.minutes} onSubmitData={handleSubmitData} />
-      <div className="stage__mistakes">Chyb: {mistakes}</div>
-      <div className="stage__words">
-        {words.map((word, index) =>
-          <Wordbox
-            word={word}
-            key={word}
-            onFinish={handleFinish}
-            active={index === 0 ? true : false}
-            onMistake={handleMistake}
-            onKeyDown={handleKeyDown}
-          />
-        )}
-      </div>
+    <div>
+      {
+        finish ? (
+          <>
+            <div className="stage__results">
+              <div className="stage__mistakes"> Počet chyb: {mistakes}</div>
+              <div className="stage__strokes--brutto">Hrubé úhozy celkem: {totalKeyStroke}</div>
+              <div className="stage__strokes--netto">Čisté úhozy: {nettoKeyStroke}</div>
+              <div className="stage__mistakes__percentage">Procento chyb: {mistakesPercentage} %</div>
+            </div>
+            <button onClick={handleStartGame}>Nová hra</button>
+            <button>Ulož výsledek</button>
+          </>
+        ) : (
+          <div className="stage">
+            <Form count={selectCount.count} minutes={selectCount.minutes} onSubmitData={handleSubmitData} />
+            <div className="stage__words">
+              {words.map((word, index) =>
+                <Wordbox
+                  word={word}
+                  key={word}
+                  onFinish={handleFinish}
+                  active={index === 0 ? true : false}
+                  onMistake={handleMistake}
+                  onTimer={() => setTimer(true)}
+                  onKeyStroke={handleKeyStroke}
+                />
+              )}
+            </div>
+          </div>
+        )
+      }
     </div>
   );
 };

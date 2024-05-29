@@ -12,6 +12,7 @@ import {
   RouterProvider
 } from 'react-router-dom'
 
+
 const router = createBrowserRouter([
   {
     path: '/',
@@ -56,6 +57,7 @@ const router = createBrowserRouter([
 ])
 
 const App: React.FC = () => {
+
   return (
     <RouterProvider router={router} />
   )

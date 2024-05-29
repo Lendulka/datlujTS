@@ -3,16 +3,16 @@ import './style.css';
 
 interface IWordboxProp {
   word: string;
-  onFinish: () => void;
   active: boolean;
+  onFinish: () => void;
   onMistake: () => void;
-  onKeyDown: () => void;
+  onTimer: () => void;
+  onKeyStroke: () => void;
 }
 
-export const Wordbox: React.FC<IWordboxProp> = ({ word, onFinish, active, onMistake, onKeyDown }) => {
+export const Wordbox: React.FC<IWordboxProp> = ({ word, onFinish, active, onMistake, onTimer, onKeyStroke }) => {
   const [lettersLeft, setLettersLeft] = useState<string>(word);
   const [mistake, setMistake] = useState<boolean>(false)
-  const [keyDown, setKeyDown] = useState<boolean>(false)
 
   console.log(lettersLeft)
 
@@ -30,18 +30,18 @@ export const Wordbox: React.FC<IWordboxProp> = ({ word, onFinish, active, onMist
         onMistake()
       }
     }
+    onKeyStroke()
   }
 
   const handleTimer = (e: KeyboardEvent) => {
     if (e.key) {
-      setKeyDown(true)
-      onKeyDown()
+      onTimer()
     }
   }
 
   useEffect(() => {
     if (active) {
-      console.log("spuštění efektu")
+      console.log("spuštění efektu 1")
       console.log(mistake, lettersLeft)
       console.log(active)
 
@@ -52,15 +52,13 @@ export const Wordbox: React.FC<IWordboxProp> = ({ word, onFinish, active, onMist
     }
   }, [lettersLeft, mistake, active, onMistake])
 
-
   useEffect(() => {
-    document.addEventListener("keydown", handleTimer)
+    console.log("spuštění efektu 2")
+    window.addEventListener("keydown", handleTimer)
     return () => {
-      document.removeEventListener("keydown", handleTimer)
+      window.removeEventListener("keydown", handleTimer)
     }
   }, [])
-
-
 
   return (
     <div className={`wordbox ${mistake && "wordbox--mistake"}`}>{lettersLeft}</div>
