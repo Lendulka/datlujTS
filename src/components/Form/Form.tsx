@@ -44,7 +44,7 @@ export const Form: React.FC<FormProps> = ({ count, minutes, onSubmitData }) => {
                     onChange={handleChange}
                     required
                 >
-                    <option value="">Select one</option>
+                    <option value="">Vyber</option>
                     {options.map((oneOption) => <option key={oneOption} value={oneOption}>{oneOption}</option>)}
                 </select>
             </label>
@@ -57,7 +57,7 @@ export const Form: React.FC<FormProps> = ({ count, minutes, onSubmitData }) => {
                     onChange={handleChange}
                     required
                 >
-                    <option value="">Select one</option>
+                    <option value="">Vyber</option>
                     <option value="1">1</option>
                     <option value="2">2</option>
                     <option value="3">3</option>

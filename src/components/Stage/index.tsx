@@ -25,7 +25,7 @@ const generateWord = (size: number) => {
   return words[wordIndex];
 }
 
-export interface StageProps {
+export interface StageDataStructure {
   count: number;
   minutes: number;
 }
@@ -39,7 +39,7 @@ export const Stage: React.FC = () => {
   const [totalKeyStroke, setTotalKeyStroke] = useState<number>(0)
   const [nettoKeyStroke, setnettoKeyStroke] = useState<number>(0)
   const [mistakesPercentage, setMistakesPercentage] = useState<number>(0)
-  const [selectCount, setSelectCount] = useState<StageProps>({
+  const [selectCount, setSelectCount] = useState<StageDataStructure>({
     count: 0,
     minutes: 0,
   })
@@ -49,7 +49,7 @@ export const Stage: React.FC = () => {
 
   useEffect(() => {
     if (finish) {
-      let nettoStroke = Math.round((totalKeyStroke - (mistakes * 50)) / selectCount.minutes)
+      let nettoStroke = Math.round((totalKeyStroke - mistakes) / selectCount.minutes)
       console.log(totalKeyStroke, mistakes, selectCount.minutes)
       let percentage = ((mistakes * 100) / totalKeyStroke)
       let percentageRounded = Math.round(percentage * 100) / 100
@@ -57,7 +57,6 @@ export const Stage: React.FC = () => {
       setMistakesPercentage(percentageRounded)
     }
   }, [finish])
-
 
   const stopGame = () => {
     console.log("STOP")
@@ -102,7 +101,7 @@ export const Stage: React.FC = () => {
   }
 
   return (
-    <div>
+    <>
       {
         finish ? (
           <>
@@ -119,22 +118,23 @@ export const Stage: React.FC = () => {
           <div className="stage">
             <Form count={selectCount.count} minutes={selectCount.minutes} onSubmitData={handleSubmitData} />
             <div className="stage__words">
-              {words.map((word, index) =>
-                <Wordbox
-                  word={word}
-                  key={word}
-                  onFinish={handleFinish}
-                  active={index === 0 ? true : false}
-                  onMistake={handleMistake}
-                  onTimer={() => setTimer(true)}
-                  onKeyStroke={handleKeyStroke}
-                />
-              )}
+              {words
+                .map((word, index) =>
+                  <Wordbox
+                    word={word}
+                    key={word}
+                    onFinish={handleFinish}
+                    active={index === 0 ? true : false}
+                    onMistake={handleMistake}
+                    onTimer={() => setTimer(true)}
+                    onKeyStroke={handleKeyStroke}
+                  />
+                )}
             </div>
           </div>
         )
       }
-    </div>
+    </>
   );
 };
 

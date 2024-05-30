@@ -1,8 +1,14 @@
 .training__content {
     display: flex;
     flex-direction: column;
-    max-width: 540px;
-    align-items: center;
+    /*max-width: 540px;*/
+    /*align-items: center;*/
     margin: auto;
-    margin-top: 1rem;
+    margin-top: 1.5rem;
+}
+
+@media (min-width: 800px) {
+    .training__content {
+        max-width: 850px;
+    }
 }

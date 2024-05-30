@@ -5,7 +5,6 @@ import { GrClose } from 'react-icons/gr'
 import { GrMenu } from 'react-icons/gr'
 import './Header.css'
 
-
 const Header: React.FC = () => {
     const [isOpen, setOpen] = useState<boolean>(false)
 
@@ -13,15 +12,6 @@ const Header: React.FC = () => {
     const encodedIcon1 = encodeURIComponent(iconString1)
     const iconString2 = ReactDOMServer.renderToString(<GrClose />)
     const encodedIcon2 = encodeURIComponent(iconString2)
-
-    /*
-    let backgroundImage
-    if (isOpen) {
-        return backgroundImage = `url("data:image/svg+xml;charset=UTF-8,${encodedIcon1}")`
-    } else {
-        return backgroundImage = `url("data:image/svg+xml;charset=UTF-8,${encodedIcon2}")`
-    }
-*/
 
     const handleClick = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
         e.preventDefault()
@@ -45,16 +35,12 @@ const Header: React.FC = () => {
             </div>
 
             <div className="navigation">
-
-
                 <button
                     className="nav-btn"
                     onClick={handleClick}
                     style={isOpen ? styles.Active : styles.Inactive}
                 >
-
                 </button>
-
 
                 <nav className={!isOpen ? 'nav-links nav-closed' : 'nav-links'} onClick={handleClick}>
                     <NavLink to="/">Domů</NavLink>
@@ -63,7 +49,6 @@ const Header: React.FC = () => {
                     <NavLink to="/login">Přihlášení</NavLink>
                     <NavLink to="/registration">Registrace</NavLink>
                 </nav>
-
             </div>
         </div >
     )

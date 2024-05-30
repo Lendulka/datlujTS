@@ -1,7 +1,7 @@
 .stage {
   /*height: 340px;*/
-  padding: 32px;
-  margin: 32px 10px;
+  padding: 20px 32px;
+  margin: 24px 10px;
   background-color: #efefef;
   border-radius: 8px;
   /*z-index: -1;*/
@@ -13,13 +13,31 @@
 }
 
 .stage__words {
-  display: flex;
+  /*display: flex;*/
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  grid-template-rows: repeat(2, 1fr);
   justify-content: center;
   flex-wrap: wrap;
   align-items: center;
+  margin: auto;
+  margin-top: 24px;
+  margin-bottom: 20px;
+  max-width: 450px;
 }
 
 .stage__results {
   margin-top: 2rem;
   font-weight: 500;
+}
+
+@media (min-width: 800px) {
+  .stage {
+    display: flex;
+    flex: 1;
+  }
+
+  .stage__words {
+    width: 100%;
+  }
 }
