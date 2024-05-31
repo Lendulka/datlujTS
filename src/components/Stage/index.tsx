@@ -1,29 +1,12 @@
 import { useState, useEffect } from 'react';
 import { FormDataStructure } from '../Form/Form';
-import wordList from '../../word-list';
+import { generateWord } from '../../helpers/helpers';
 import Wordbox from '../Wordbox';
 import Form from '../Form/Form';
 import './style.css';
 
 // TODO: temporary disable function - remove next line when you start using it
 /* eslint-disable-next-line @typescript-eslint/no-unused-vars */
-
-console.log(wordList.length)
-
-const generateWord = (size: number) => {
-
-  const sizeIndex = size === undefined
-    ? Math.floor(Math.random() * wordList.length)
-    : size - 3;
-
-  if (sizeIndex < 0 || sizeIndex >= wordList.length) {
-    return null;
-  }
-
-  const words = wordList[sizeIndex];
-  const wordIndex = Math.floor(Math.random() * words.length);
-  return words[wordIndex];
-}
 
 export interface StageDataStructure {
   count: number;
@@ -34,7 +17,6 @@ export const Stage: React.FC = () => {
   const [words, setWords] = useState<string[]>(["jahoda", "malina", "jablko", "ananas"]);
   const [mistakes, setMistakes] = useState<number>(0)
   const [timer, setTimer] = useState<boolean>(false)
-  const [_, setStartGame] = useState<boolean>(false)
   const [finish, setFinish] = useState<boolean>(false)
   const [totalKeyStroke, setTotalKeyStroke] = useState<number>(0)
   const [nettoKeyStroke, setnettoKeyStroke] = useState<number>(0)
@@ -46,11 +28,11 @@ export const Stage: React.FC = () => {
 
   console.log(selectCount.count, selectCount.minutes)
   console.log(totalKeyStroke)
+  console.log(timer)
 
   useEffect(() => {
     if (finish) {
       let nettoStroke = Math.round((totalKeyStroke - mistakes) / selectCount.minutes)
-      console.log(totalKeyStroke, mistakes, selectCount.minutes)
       let percentage = ((mistakes * 100) / totalKeyStroke)
       let percentageRounded = Math.round(percentage * 100) / 100
       setnettoKeyStroke(nettoStroke)
@@ -58,7 +40,7 @@ export const Stage: React.FC = () => {
     }
   }, [finish])
 
-  const stopGame = () => {
+  const stopTimer = () => {
     console.log("STOP")
     setFinish(true)
   }
@@ -66,7 +48,7 @@ export const Stage: React.FC = () => {
   useEffect(() => {
     if (timer) {
       let milSec = (Number(selectCount.minutes) * 60 * 1000)
-      const timerId = setTimeout(stopGame, milSec)
+      const timerId = setTimeout(stopTimer, milSec)
       return () => { clearTimeout(timerId) }
     }
   }, [timer])
@@ -94,9 +76,15 @@ export const Stage: React.FC = () => {
     setTotalKeyStroke(prev => prev + 1)
   }
 
-  const handleStartGame = () => {
-    setStartGame(true)
+  const handleStartGame = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+    e.preventDefault()
+    setWords(["jahoda", "malina", "jablko", "ananas"])
+    setMistakes(0)
+    setTimer(false)
     setFinish(false)
+    setTotalKeyStroke(0)
+    setnettoKeyStroke(0)
+    setMistakesPercentage(0)
     setSelectCount({ ...selectCount, count: 0, minutes: 0 })
   }
 
@@ -104,16 +92,17 @@ export const Stage: React.FC = () => {
     <>
       {
         finish ? (
-          <>
-            <div className="stage__results">
-              <div className="stage__mistakes"> Počet chyb: {mistakes}</div>
-              <div className="stage__strokes--brutto">Hrubé úhozy celkem: {totalKeyStroke}</div>
-              <div className="stage__strokes--netto">Čisté úhozy: {nettoKeyStroke}</div>
-              <div className="stage__mistakes__percentage">Procento chyb: {mistakesPercentage} %</div>
-            </div>
-            <button onClick={handleStartGame}>Nová hra</button>
-            <button>Ulož výsledek</button>
-          </>
+          <div className="stage__results">
+            <div className="stage__mistakes"> Počet chyb: {mistakes}</div>
+            <div className="stage__strokes--brutto">Hrubé úhozy celkem: {totalKeyStroke}</div>
+            <div className="stage__strokes--netto">Čisté úhozy: {nettoKeyStroke}</div>
+            <div className="stage__mistakes__percentage">Procento chyb: {mistakesPercentage} %</div>
+
+            <button className="form__button" id="button__width--small" onClick={handleStartGame}>
+              Nová hra
+            </button>
+            <button className="form__button" id="button__width--small">Ulož výsledek</button>
+          </div>
         ) : (
           <div className="stage">
             <Form count={selectCount.count} minutes={selectCount.minutes} onSubmitData={handleSubmitData} />

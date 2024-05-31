@@ -1,8 +1,6 @@
 .training__content {
     display: flex;
     flex-direction: column;
-    /*max-width: 540px;*/
-    /*align-items: center;*/
     margin: auto;
     margin-top: 1.5rem;
 }

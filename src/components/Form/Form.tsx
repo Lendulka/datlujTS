@@ -16,8 +16,6 @@ export const Form: React.FC<FormProps> = ({ count, minutes, onSubmitData }) => {
         minutes: minutes,
     })
 
-    console.log(count)
-
     const options = []
     for (let i = 2; i < 23; i++) {
         options.push(i + 1)

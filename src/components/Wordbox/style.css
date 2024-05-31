@@ -16,4 +16,23 @@
 .wordbox--mistake {
   background-color: #e64747;
   color: white;
+  animation: color 300ms;
+}
+
+@keyframes color {
+  0% {
+    background-color: rgb(201, 73, 73);
+  }
+
+  50% {
+    background-color: #e64747;
+  }
+
+  100% {
+    background-color: rgb(201, 73, 73);
+  }
+
+  0% {
+    background-color: #e64747;
+  }
 }

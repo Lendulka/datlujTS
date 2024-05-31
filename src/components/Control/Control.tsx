@@ -1,7 +1,7 @@
 import { NavLink } from 'react-router-dom'
 import './Control.css'
 
-const Control = () => {
+export const Control: React.FC = () => {
     return (
         <nav className="control">
             <NavLink to="/training/stage">Hra</NavLink>

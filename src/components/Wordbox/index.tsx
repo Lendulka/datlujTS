@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import './style.css';
 
-interface IWordboxProp {
+export interface IWordboxProp {
   word: string;
   active: boolean;
   onFinish: () => void;
@@ -13,8 +13,6 @@ interface IWordboxProp {
 export const Wordbox: React.FC<IWordboxProp> = ({ word, onFinish, active, onMistake, onTimer, onKeyStroke }) => {
   const [lettersLeft, setLettersLeft] = useState<string>(word);
   const [mistake, setMistake] = useState<boolean>(false)
-
-  console.log(lettersLeft)
 
   const handleLetters = (e: KeyboardEvent) => {
     if (lettersLeft.length > 0) {
@@ -42,12 +40,9 @@ export const Wordbox: React.FC<IWordboxProp> = ({ word, onFinish, active, onMist
   useEffect(() => {
     if (active) {
       console.log("spuštění efektu 1")
-      console.log(mistake, lettersLeft)
-      console.log(active)
-
-      document.addEventListener("keyup", handleLetters)
+      window.addEventListener("keyup", handleLetters)
       return () => {
-        document.removeEventListener("keyup", handleLetters)
+        window.removeEventListener("keyup", handleLetters)
       }
     }
   }, [lettersLeft, mistake, active, onMistake])
@@ -58,7 +53,7 @@ export const Wordbox: React.FC<IWordboxProp> = ({ word, onFinish, active, onMist
     return () => {
       window.removeEventListener("keydown", handleTimer)
     }
-  }, [])
+  }, [onTimer])
 
   return (
     <div className={`wordbox ${mistake && "wordbox--mistake"}`}>{lettersLeft}</div>
